@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express'
 import express from 'express'
 
 import usersRouter from './routes/users.routes'
@@ -8,8 +9,10 @@ app.use(express.json())
 
 // Routes
 app.use('/users', usersRouter)
-
 databaseService.connect()
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  res.status(404).json({ error: err.message })
+})
 
 // Start the server
 app.listen(port, () => {

@@ -36,7 +36,6 @@ class UsersService {
     const result = await databaseService.users.insertOne(
       new User({ ...payload, date_of_birth: new Date(payload.date_of_birth), password: hassPassword(payload.password) })
     )
-
     // id cua user
     const user_id = result.insertedId.toString()
     // signAccessToken va signRefreshToken deu la bat dong bo nen dung Promise.all de toi uu performance

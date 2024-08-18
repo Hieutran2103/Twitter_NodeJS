@@ -3,16 +3,15 @@ import express from 'express'
 
 import usersRouter from './routes/users.routes'
 import databaseService from '~/services/database.services'
+import { defaultErrorHandler } from './middlewares/error.middlewares'
 const app = express()
 const port = 3000
 app.use(express.json())
+databaseService.connect()
 
 // Routes
 app.use('/users', usersRouter)
-databaseService.connect()
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  res.status(404).json({ error: err.message })
-})
+app.use(defaultErrorHandler)
 
 // Start the server
 app.listen(port, () => {

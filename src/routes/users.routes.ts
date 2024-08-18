@@ -13,6 +13,6 @@ usersRouter.post('/login', loginValidator, loginController)
  gửi ngày giờ lên server ta dùng Date().toISOString()
  body{ name:string , email:string , password:string,confirm_password:String, date_of_birth: ISOString}
 */
-usersRouter.post('/register', validate(registerValidator), wrapRequestHandler(registerController))
+usersRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
 
 export default usersRouter

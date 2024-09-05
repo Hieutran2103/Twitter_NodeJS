@@ -4,11 +4,11 @@ import { TokenPayload } from '~/models/requests/User.requests'
 config()
 export const signToken = ({
   payload,
-  privateKey = process.env.JWT_SECRET as string,
+  privateKey,
   options
 }: {
   payload: string | Buffer | object
-  privateKey?: string
+  privateKey: string
   options: SignOptions
 }) => {
   return new Promise<string>((resolve, reject) => {
@@ -21,13 +21,7 @@ export const signToken = ({
   })
 }
 
-export const verifyToken = ({
-  token,
-  scretOnPublicKey = process.env.JWT_SECRET as string
-}: {
-  token: string
-  scretOnPublicKey?: string
-}) => {
+export const verifyToken = ({ token, scretOnPublicKey }: { token: string; scretOnPublicKey: string }) => {
   return new Promise<TokenPayload>((resolve, reject) => {
     jwt.verify(token, scretOnPublicKey, (error, decoded) => {
       if (error) {

@@ -24,6 +24,13 @@ export interface UpdateMeReqBody {
 export interface FolowReqBody {
   followed_user_id: string
 }
+
+export interface ChangePasswordReqBody {
+  old_password: string
+  password: string
+  confirm_password: string
+}
+
 export interface UnFolowReqParams extends ParamsDictionary {
   user_id: string
 }

@@ -137,8 +137,11 @@ class UsersService {
         { $set: { email_verify_token: '', updated_at: new Date(), verify: UserVerifyStatus.Verified } }
       )
     ])
-    console.log(token)
+
     const [accessToken, refreshToken] = token
+    await databaseService.refreshToken.insertOne(
+      new RefreshToken({ user_id: new ObjectId(user_id), token: refreshToken })
+    )
     return {
       accessToken,
       refreshToken
@@ -254,6 +257,13 @@ class UsersService {
     }
 
     return { message: USER_MESSAGE.ALREADY_UNFOLLOW_SUCCESS }
+  }
+  async changePassword(user_id: string, new_password: string) {
+    await databaseService.users.updateOne(
+      { _id: new ObjectId(user_id) },
+      { $set: { password: hassPassword(new_password), updated_at: new Date() } }
+    )
+    return { message: USER_MESSAGE.CHANGE_PASSWORD_SUCCESSFULLY }
   }
 }
 

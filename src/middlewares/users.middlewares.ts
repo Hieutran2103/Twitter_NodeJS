@@ -16,6 +16,7 @@ import { capitalize } from 'lodash'
 import { ObjectId } from 'mongodb'
 import { TokenPayload } from '~/models/requests/User.requests'
 import { UserVerifyStatus } from '~/constants/enums'
+import { REGEX_USERNAME } from '~/constants/regex'
 
 const passwordSchema: ParamSchema = {
   notEmpty: {
@@ -599,12 +600,21 @@ export const updateMeValidator = validate(
           errorMessage: USER_MESSAGE.USERNAME_MUST_BE_STRING
         },
         trim: true,
-        isLength: {
-          options: {
-            min: 1,
-            max: 50
-          },
-          errorMessage: USER_MESSAGE.USERNAME_LENGTH
+        custom: {
+          options: async (value: string, { req }) => {
+            if (!REGEX_USERNAME.test(value) == true) {
+              throw new Error(USER_MESSAGE.USERNAME_INVALID)
+            }
+
+            const user = await databaseService.users.findOne({
+              username: value
+            })
+            if (user) {
+              throw new Error(USER_MESSAGE.USER_EXISTED)
+            }
+
+            return true
+          }
         }
       },
       avatar: {
@@ -668,4 +678,55 @@ export const unfollowValidator = validate(
     ['params']
   )
 )
-unfollowValidator
+
+export const changePasswordValidator = validate(
+  checkSchema(
+    {
+      old_password: {
+        ...passwordSchema,
+        custom: {
+          options: async (value: string, { req }) => {
+            const { user_id } = (req as Request).decoded_access_token as TokenPayload
+
+            const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+            if (!user) {
+              throw new Error(USER_MESSAGE.USER_NOT_FOUND)
+            }
+            const { password } = user
+            if (hassPassword(value) !== password) {
+              throw new ErrorWithStatus({
+                message: USER_MESSAGE.OLD_PASSWORD_INCORRECT,
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
+            return true
+          }
+        }
+      },
+      password: {
+        ...passwordSchema,
+        custom: {
+          options: async (value: string, { req }) => {
+            const { user_id } = (req as Request).decoded_access_token as TokenPayload
+
+            const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+            if (!user) {
+              throw new Error(USER_MESSAGE.USER_NOT_FOUND)
+            }
+            const { password } = user
+            // Nếu password mới mà trùng cũ thì ko update
+            if (hassPassword(value) == password) {
+              throw new ErrorWithStatus({
+                message: USER_MESSAGE.NOT_SAME_THE_OLD_PASSWORD,
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
+            return true
+          }
+        }
+      },
+      confirm_password: confirmPasswordSchema
+    },
+    ['body']
+  )
+)

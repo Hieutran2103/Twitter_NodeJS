@@ -7,6 +7,7 @@ import {
   getMeController,
   loginController,
   logoutController,
+  oauthController,
   registerController,
   resendVerifyEmailController,
   resetPasswordController,
@@ -32,7 +33,6 @@ import {
 } from '~/middlewares/users.middlewares'
 import { UpdateMeReqBody } from '~/models/requests/User.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
-import { validate } from '~/utils/validation'
 
 const usersRouter = Router()
 /*
@@ -43,10 +43,18 @@ const usersRouter = Router()
 usersRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
 
 /*
+    OAuth with Google Account
+    method: Get
+    query : {code:string}
+*/
+usersRouter.get('/oauth/google', wrapRequestHandler(oauthController))
+
+/*
     REGISTER
  gửi ngày giờ lên server ta dùng Date().toISOString()
  body{ name:string , email:string , password:string,confirm_password:String, date_of_birth: ISOString}
 */
+
 usersRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
 
 /*

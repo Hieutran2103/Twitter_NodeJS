@@ -8,6 +8,7 @@ export const USER_MESSAGE = {
   EMAIL_IS_INVALID: 'Email is invalid',
   EMAIL_OR_PASSWORD_INCORRECT: 'Email or password incorrect',
   EMAIL_OR_PASSWORD_IS_INCORRECT: 'Email or password is incorrect',
+  GOOGLE_EMAIL_NOT_VERIFIED: ' google email is not verified ',
   PASSWORD_IS_REQUIRED: 'Password is required',
   PASSWORD_MUST_BE_A_STRING: 'Password must be a string',
   PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50: 'Password length must be from 6 to 50',

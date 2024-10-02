@@ -18,7 +18,7 @@ interface TweetConstructor {
   updated_at?: Date
 }
 
-export default class RefreshToken {
+export default class Tweet {
   _id?: ObjectId
   user_id: ObjectId
   type: TweetType

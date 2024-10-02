@@ -8,6 +8,7 @@ import {
   loginController,
   logoutController,
   oauthController,
+  refreshTokenController,
   registerController,
   resendVerifyEmailController,
   resetPasswordController,
@@ -63,6 +64,12 @@ usersRouter.post('/register', registerValidator, wrapRequestHandler(registerCont
     Body: {refresh_token: string}
 */
 usersRouter.post('/logout', accessTokenValidation, refreshTokenValidation, wrapRequestHandler(logoutController))
+
+/*
+    Refresh Token
+    Body: {refresh_token: string}
+*/
+usersRouter.post('/refresh-token', refreshTokenValidation, wrapRequestHandler(refreshTokenController))
 
 /*
     VerifyEmail

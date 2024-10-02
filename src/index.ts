@@ -6,17 +6,27 @@ import databaseService from '~/services/database.services'
 import { defaultErrorHandler } from './middlewares/error.middlewares'
 import mediasRouter from './routes/medias.routes'
 import { initFolder } from './utils/file'
+import { config } from 'dotenv'
+import staticRouter from './routes/static.routes'
+import tweetsRouter from './routes/tweets.routes'
+config()
 const app = express()
-const port = 3000
+const port = process.env.PORT || 4000
 app.use(express.json())
-databaseService.connect()
+databaseService.connect().then(() => {
+  databaseService.indexUsers()
+  databaseService.indexRefreshTokens()
+  databaseService.indexFollowers()
+})
 
 // Tạo folder Upload
 initFolder()
 // Routes
 app.use('/users', usersRouter)
 app.use('/medias', mediasRouter)
-
+app.use('/static', staticRouter)
+app.use('/tweets', tweetsRouter)
+//Error Handler
 app.use(defaultErrorHandler)
 
 // Start the server

@@ -26,7 +26,7 @@ export const USER_MESSAGE = {
   ACCESS_TOKEN_IS_REQUIRED: 'Access token is required',
   REFRESH_TOKEN_IS_REQUIRED: 'Refresh token is required',
   REFRESH_TOKEN_INVALID: 'Refresh token is invalid',
-
+  REFRESH_TOKEN_SUCCESSFUL: 'Refresh token has been successfully updated',
   USED_REFRESH_TOKEN_OR_NOT_EXIST: 'Used refresh token or not exit',
   LOGOUT_SUCCESS: 'Logout successfully',
   EMAIL_VERIFY_TOKEN_IS_REQUIRED: 'Email verification token is required',
@@ -66,4 +66,21 @@ export const USER_MESSAGE = {
   OLD_PASSWORD_INCORRECT: ' Old password incorrect',
   CHANGE_PASSWORD_SUCCESSFULLY: ' Password has been changed successfully',
   NOT_SAME_THE_OLD_PASSWORD: ' The new password must be different from the old password '
+} as const
+
+export const TWEET_MESSAGE = {
+  CREATE_TWEET_SUCCESS: 'Create tweet successfully',
+  GET_TWEETS_SUCCESS: 'Get tweets successfully',
+  GET_TWEET_SUCCESS: 'Get tweet successfully',
+  DELETE_TWEET_SUCCESS: 'Delete tweet successfully',
+  UPDATE_TWEET_SUCCESS: 'Update tweet successfully',
+  INVALID_TYPE: 'Invalid type',
+  INVALID_AUDIENCE: 'Invalid audience',
+  PARENT_ID_MUST_BE_A_VALID_TWEET_ID: 'Parent id must be a valid tweet id',
+  PARENT_ID_MUST_BE_NULL: ' Parent id must be null',
+  CONTENT_MUST_BE_A_NON_EMPTY_STRING: ' Content must be a non-empty string',
+  PARENT_ID_MUST_BE_EMPTY_STRING: 'Content must be empty string',
+  HASHTAG_MUST_BE_AN_ARRAY_STRING: ' hashtag must be an array string',
+  MENTION_MUST_BE_AN_ARRAY_OF_USER_ID: 'hashtag must be an array of user IDs',
+  MEDIA_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: ' Media object must be an array of media objects'
 } as const

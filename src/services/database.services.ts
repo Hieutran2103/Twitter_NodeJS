@@ -3,6 +3,10 @@ import dotenv from 'dotenv'
 import User from '~/models/schemas/User.schemas'
 import RefreshToken from '~/models/schemas/RefreshToken.schemas'
 import Follower from '~/models/schemas/Follower.schemas'
+import Tweet from '~/models/schemas/Tweet.schema'
+import Hashtag from '~/models/schemas/Hashtag.schemas'
+import Bookmark from '~/models/schemas/Bookmark.schema'
+import Like from '~/models/schemas/Likes.schema'
 
 dotenv.config()
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@testnodejssuper.2dqnsfl.mongodb.net/?retryWrites=true&w=majority&appName=TestNodeJsSuper`
@@ -58,11 +62,23 @@ class DatabaseService {
     return this.db.collection(process.env.DB_USERS_COLLECTION as string)
   }
 
+  get tweets(): Collection<Tweet> {
+    return this.db.collection(process.env.DB_TWEETS_COLLECTION as string)
+  }
   get refreshToken(): Collection<RefreshToken> {
     return this.db.collection(process.env.DB_REFRESH_TOKEN_COLLECTION as string)
   }
   get followers(): Collection<Follower> {
     return this.db.collection(process.env.DB_FOLLOWERS_COLLECTION as string)
+  }
+  get hashtags(): Collection<Hashtag> {
+    return this.db.collection(process.env.DB_HASHTAGS_COLLECTION as string)
+  }
+  get bookmarks(): Collection<Bookmark> {
+    return this.db.collection(process.env.DB_BOOKMARKS_COLLECTION as string)
+  }
+  get likes(): Collection<Like> {
+    return this.db.collection(process.env.DB_LIKES_COLLECTION as string)
   }
 }
 

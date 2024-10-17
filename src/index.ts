@@ -9,6 +9,8 @@ import { initFolder } from './utils/file'
 import { config } from 'dotenv'
 import staticRouter from './routes/static.routes'
 import tweetsRouter from './routes/tweets.routes'
+import bookmarksRouter from './routes/bookmarks.routes'
+import likesRouter from './routes/likes.routes'
 config()
 const app = express()
 const port = process.env.PORT || 4000
@@ -26,6 +28,8 @@ app.use('/users', usersRouter)
 app.use('/medias', mediasRouter)
 app.use('/static', staticRouter)
 app.use('/tweets', tweetsRouter)
+app.use('/bookmarks', bookmarksRouter)
+app.use('/likes', likesRouter)
 //Error Handler
 app.use(defaultErrorHandler)
 

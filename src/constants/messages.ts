@@ -84,3 +84,13 @@ export const TWEET_MESSAGE = {
   MENTION_MUST_BE_AN_ARRAY_OF_USER_ID: 'hashtag must be an array of user IDs',
   MEDIA_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: ' Media object must be an array of media objects'
 } as const
+
+export const BOOKMARKS_MESSAGE = {
+  CREATE_BOOKMARKS_SUCCESS: 'Bookmark successfully',
+  DELETE_BOOKMARKS_SUCCESS: 'UnBookmark successfully'
+} as const
+
+export const LIKES_MESSAGE = {
+  LIKE_SUCCESS: 'Like successfully',
+  DELETE_LIKES_SUCCESS: 'UnLike successfully'
+} as const

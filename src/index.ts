@@ -11,6 +11,9 @@ import staticRouter from './routes/static.routes'
 import tweetsRouter from './routes/tweets.routes'
 import bookmarksRouter from './routes/bookmarks.routes'
 import likesRouter from './routes/likes.routes'
+
+// import '~/utils/fake'
+
 config()
 const app = express()
 const port = process.env.PORT || 4000

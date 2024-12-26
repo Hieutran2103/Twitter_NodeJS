@@ -175,3 +175,10 @@ export const changePasswordController = async (
   const result = await usersService.changePassword(user_id, password)
   return res.json(result)
 }
+export const addCircleController = async (req: Request, res: Response) => {
+  const { user_id } = req.decoded_access_token as TokenPayload
+  const { user_added_circle } = req.body
+
+  const result = await usersService.addCircle(user_id, user_added_circle)
+  return res.json(result)
+}

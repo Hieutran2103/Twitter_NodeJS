@@ -65,7 +65,8 @@ export const USER_MESSAGE = {
   ALREADY_UNFOLLOW_SUCCESS: ' already unfollow this user',
   OLD_PASSWORD_INCORRECT: ' Old password incorrect',
   CHANGE_PASSWORD_SUCCESSFULLY: ' Password has been changed successfully',
-  NOT_SAME_THE_OLD_PASSWORD: ' The new password must be different from the old password '
+  NOT_SAME_THE_OLD_PASSWORD: ' The new password must be different from the old password ',
+  ADD_USER_CIRCLE_SUCCESS: ' Add user circle successfully'
 } as const
 
 export const TWEET_MESSAGE = {
@@ -82,7 +83,12 @@ export const TWEET_MESSAGE = {
   PARENT_ID_MUST_BE_EMPTY_STRING: 'Content must be empty string',
   HASHTAG_MUST_BE_AN_ARRAY_STRING: ' hashtag must be an array string',
   MENTION_MUST_BE_AN_ARRAY_OF_USER_ID: 'hashtag must be an array of user IDs',
-  MEDIA_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: ' Media object must be an array of media objects'
+  MEDIA_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: ' Media object must be an array of media objects',
+  INVALID_ID_TWEET_ID: 'Invalid id ',
+  TWEET_NOT_FOUND: 'Tweet not found',
+  TWEET_IS_NOT_PUBLIC: 'Tweet is not public',
+  INVALID_TWEET_TYPE: 'Invalid tweet type',
+  LIMIT_MUST_BE_NUMBER_IN_RANGE: 'Limit must be a number between 1 and 100 inclusive inclusive'
 } as const
 
 export const BOOKMARKS_MESSAGE = {

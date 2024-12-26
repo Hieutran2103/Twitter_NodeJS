@@ -22,10 +22,9 @@ class MediasService {
         // console.log(file)
         // console.log(newPath)
         // sharp sẽ lấy url để xử lý rồi add vào uploadFolder
-        await sharp(file.filepath).jpeg({}).toFile(newPath)
-
-        // mục đích để xóa ảnh ở folder Temp
-        // await Promise.all([fs.unlink(file.filepath), fs.unlink(newPath)])
+        await sharp(file.filepath).jpeg({}).toFile(newPath),
+          // mục đích để xóa ảnh ở folder Temp
+          await Promise.all([fs.unlink(file.filepath), fs.unlink(newPath)])
 
         return {
           url: isProduction
@@ -37,6 +36,7 @@ class MediasService {
     )
     return result
   }
+
   async handleUploadVideo(req: Request) {
     const files = await handleUploadVideo(req)
 

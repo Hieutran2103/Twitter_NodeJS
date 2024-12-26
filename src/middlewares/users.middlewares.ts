@@ -730,3 +730,12 @@ export const changePasswordValidator = validate(
     ['body']
   )
 )
+
+// Kiem tra da dang nhap hay chua
+export const isUserLoggedInValidator = (middleware: (req: Request, res: Response, next: NextFunction) => void) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (req.headers.authorization) {
+      return middleware(req, res, next)
+    }
+  }
+}

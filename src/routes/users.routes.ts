@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  addCircleController,
   changePasswordController,
   emailVerifyController,
   followController,
@@ -174,6 +175,18 @@ usersRouter.put(
   verifiedUserValidator,
   changePasswordValidator,
   wrapRequestHandler(changePasswordController)
+)
+
+/*
+   Add user to circle
+    Header: {Authorization: Bearer <access_token>}
+   
+*/
+usersRouter.post(
+  '/add-user-circle',
+  accessTokenValidation,
+  verifiedUserValidator,
+  wrapRequestHandler(addCircleController)
 )
 
 export default usersRouter

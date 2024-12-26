@@ -10,6 +10,7 @@ import { config } from 'dotenv'
 import { USER_MESSAGE } from '~/constants/messages'
 import Follower from '~/models/schemas/Follower.schemas'
 import axios from 'axios'
+
 import { ErrorWithStatus } from '~/models/Errors'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import { random } from 'lodash'
@@ -20,7 +21,6 @@ class UsersService {
       payload: {
         user_id,
         verify,
-
         token_type: TokenType.AccessToken
       },
       privateKey: process.env.JWT_SECRET_ACCESS_TOKEN as string,
@@ -402,6 +402,16 @@ class UsersService {
       { $set: { password: hassPassword(new_password), updated_at: new Date() } }
     )
     return { message: USER_MESSAGE.CHANGE_PASSWORD_SUCCESSFULLY }
+  }
+  async addCircle(user_id: string, user_added_circle: string) {
+    await databaseService.users.updateOne(
+      { _id: new ObjectId(user_id) },
+      {
+        $push: { twitter_circle: { $each: [new ObjectId(user_added_circle)] } },
+        $set: { updated_at: new Date() }
+      }
+    )
+    return { message: USER_MESSAGE.ADD_USER_CIRCLE_SUCCESS }
   }
 }
 

@@ -15,6 +15,15 @@ export enum MediaType {
   Video
 }
 
+export enum MediaTypeQuery {
+  Image = 'image',
+  Video = 'video'
+}
+export enum PeopleFollow {
+  All = '0',
+  Follow = '1'
+}
+
 export enum TweetAudience {
   Everyone, // 0
   TwitterCircle // 1

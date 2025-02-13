@@ -1,4 +1,3 @@
-import { Request, Response, NextFunction } from 'express'
 import express from 'express'
 
 import usersRouter from './routes/users.routes'
@@ -13,13 +12,34 @@ import bookmarksRouter from './routes/bookmarks.routes'
 import likesRouter from './routes/likes.routes'
 import searchRouter from './routes/search.routes'
 import { createServer } from 'http'
-import { Server } from 'socket.io'
-import cors from 'cors'
+import cors, { CorsOptions } from 'cors'
+import conversationsRouter from './routes/conversations.routes'
+
+import helmet from 'helmet'
+import initSocket from './utils/socket'
+import { rateLimit } from 'express-rate-limit'
+import { isProduction } from './constants/config'
 // import '~/utils/fake'
 
 config()
 const app = express()
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+  legacyHeaders: false // Disable the `X-RateLimit-*` headers.
+  // store: ... , // Redis, Memcached, etc. See below.
+})
+app.use(limiter)
+
+// const corsOptions: CorsOptions = {
+//   origin: isProduction ? envConfig.clientUrl : '*'
+// }
+
 app.use(cors())
+app.use(helmet())
+
 const httpServer = createServer(app)
 
 const port = process.env.PORT || 4000
@@ -40,32 +60,13 @@ app.use('/tweets', tweetsRouter)
 app.use('/bookmarks', bookmarksRouter)
 app.use('/likes', likesRouter)
 app.use('/search', searchRouter)
+app.use('/conversations', conversationsRouter)
 
+initSocket(httpServer)
 //Error Handler
 app.use(defaultErrorHandler)
 
-const io = new Server(httpServer, {
-  cors: {
-    origin: '*'
-  }
-})
-
-io.on('connect', (socket) => {
-  console.log(`${socket.id} connected`) // x8WIv7-mJelg7on_ALbx
-
-  socket.on('hello', (agr) => {
-    console.log(agr)
-  })
-  socket.emit('hehe', {
-    name: 'hello',
-    age: 34
-  })
-  socket.on('disconnect', () => {
-    console.log(`${socket.id} disconnected`) // x8WIv7-mJelg7on_ALbx
-  })
-})
-
-// Start the server
+// Khởi động server
 httpServer.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })

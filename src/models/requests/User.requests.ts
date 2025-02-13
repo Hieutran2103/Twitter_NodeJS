@@ -26,6 +26,10 @@ export interface FolowReqBody {
   followed_user_id: string
 }
 
+export interface GetProfileReqParams extends ParamsDictionary {
+  username: string
+}
+
 export interface ChangePasswordReqBody {
   old_password: string
   password: string

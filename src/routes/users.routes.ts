@@ -6,6 +6,7 @@ import {
   followController,
   forgotPasswordController,
   getMeController,
+  getProfileController,
   loginController,
   logoutController,
   oauthController,
@@ -137,6 +138,10 @@ usersRouter.patch(
   wrapRequestHandler(updateMeController)
 )
 
+/*  
+Get other Profile by username
+*/
+usersRouter.get('/:username', wrapRequestHandler(getProfileController))
 /*
     FOLLOW USER
     Header: {Authorization: Bearer <access_token>}

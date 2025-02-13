@@ -4,7 +4,7 @@ import { config } from 'dotenv'
 import { Pagination, TweetParam, TweetQuery, TweetRequestBody } from '~/models/requests/Tweets.requests'
 import tweetsService from '~/services/tweets.services'
 import { TokenPayload } from '~/models/requests/User.requests'
-import { result } from 'lodash'
+
 import { TweetType } from '~/constants/enums'
 config()
 export const createTweetController = async (req: Request<ParamsDictionary, any, TweetRequestBody>, res: Response) => {

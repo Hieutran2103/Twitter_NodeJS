@@ -5,6 +5,7 @@ import {
   ChangePasswordReqBody,
   FolowReqBody,
   ForgotPasswordReqBody,
+  GetProfileReqParams,
   LogoutReqBody,
   RefreshTokenReqBody,
   RegisterReqBody,
@@ -146,6 +147,15 @@ export const updateMeController = async (req: Request<ParamsDictionary, any, Upd
   return res.json({
     message: USER_MESSAGE.UPDATE_ME_SUCCESS,
     result
+  })
+}
+
+export const getProfileController = async (req: Request<GetProfileReqParams>, res: Response, next: NextFunction) => {
+  const { username } = req.params
+  const user = await usersService.getProfile(username)
+  return res.json({
+    message: USER_MESSAGE.GET_PROFILE_SUCCESS,
+    result: user
   })
 }
 

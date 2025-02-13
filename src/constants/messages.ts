@@ -66,7 +66,8 @@ export const USER_MESSAGE = {
   OLD_PASSWORD_INCORRECT: ' Old password incorrect',
   CHANGE_PASSWORD_SUCCESSFULLY: ' Password has been changed successfully',
   NOT_SAME_THE_OLD_PASSWORD: ' The new password must be different from the old password ',
-  ADD_USER_CIRCLE_SUCCESS: ' Add user circle successfully'
+  ADD_USER_CIRCLE_SUCCESS: ' Add user circle successfully',
+  GET_PROFILE_SUCCESS: ' Profile has been successfully'
 } as const
 
 export const TWEET_MESSAGE = {

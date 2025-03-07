@@ -13,7 +13,8 @@ import axios from 'axios'
 
 import { ErrorWithStatus } from '~/models/Errors'
 import { HTTP_STATUS } from '~/constants/httpStatus'
-import { random } from 'lodash'
+
+import { sendForgotPasswordEmail, sendVerifyRegisterEmail } from '~/utils/email'
 config()
 class UsersService {
   private signAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
@@ -98,6 +99,7 @@ class UsersService {
   }
   async register(payload: RegisterReqBody) {
     const user_id = new ObjectId()
+
     const email_verify_token = await this.signEmailVerifyToken({
       user_id: user_id.toString(),
       verify: UserVerifyStatus.Unverified
@@ -124,6 +126,15 @@ class UsersService {
     await databaseService.refreshToken.insertOne(
       new RefreshToken({ user_id: new ObjectId(user_id), token: refreshToken, iat, exp })
     )
+
+    // Flow verify email
+    // 1 server send email to user
+    //2 User click link in email
+    // 3 Client sent request to server with email_verify_token
+    // 4 Server verify email
+    // 5 Client receive access_token and refresh_token
+
+    await sendVerifyRegisterEmail(payload.email, email_verify_token)
 
     return { accessToken, refreshToken }
   }
@@ -286,24 +297,25 @@ class UsersService {
     }
   }
 
-  async sendVerifyEmail(user_id: string) {
+  async sendVerifyEmail(user_id: string, email: string) {
     const email_verify_token = await this.signEmailVerifyToken({
       user_id: user_id.toString(),
       verify: UserVerifyStatus.Unverified
     })
-    // gui lại email
-    console.log(email_verify_token)
 
     await databaseService.users.updateOne(
       { _id: new ObjectId(user_id) },
       { $set: { email_verify_token, updated_at: new Date() } }
     )
+
+    await sendVerifyRegisterEmail(email, email_verify_token)
+
     return {
       message: USER_MESSAGE.RESEND_VERIFY_EMAIL_SUCCESS
     }
   }
 
-  async forgotPassword({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
+  async forgotPassword({ user_id, verify, email }: { user_id: string; verify: UserVerifyStatus; email: string }) {
     const forgot_password_token = await this.signForgotPasswordToken({
       user_id: user_id.toString(),
       verify
@@ -316,6 +328,8 @@ class UsersService {
 
     // Gửi email kèm đường link
     console.log('forgotPassword: ', forgot_password_token)
+    await sendForgotPasswordEmail(email, forgot_password_token)
+
     return {
       message: USER_MESSAGE.CHECK_EMAIL_TO_RESET_PASSWORD
     }

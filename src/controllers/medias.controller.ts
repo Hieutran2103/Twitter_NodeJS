@@ -7,13 +7,13 @@ import mime from 'mime'
 import mediasService from '~/services/medias.services'
 
 export const uploadImageController = async (req: Request, res: Response, next: NextFunction) => {
-  const result = await mediasService.handleUploadImages(req)
+  const result = await mediasService.uploadImage(req)
 
   return res.json({ message: 'Upload success', result })
 }
 
 export const uploadVideoController = async (req: Request, res: Response, next: NextFunction) => {
-  const result = await mediasService.handleUploadVideo(req)
+  const result = await mediasService.UploadVideo(req)
   return res.json({ message: 'Upload success', result })
 }
 export const uploadVideoHLSController = async (req: Request, res: Response, next: NextFunction) => {
@@ -26,6 +26,8 @@ export const serveImageController = (req: Request, res: Response, next: NextFunc
   const name = req.params.name
   return res.sendFile(path.resolve(UPLOAD_IMAGE_FOLDER, name), (err) => {
     if (err) {
+      console.log(path.resolve(UPLOAD_IMAGE_FOLDER, name))
+
       return res.status((err as any).status).send('Error uploading image')
     }
   })

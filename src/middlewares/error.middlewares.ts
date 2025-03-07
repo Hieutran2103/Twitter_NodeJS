@@ -3,18 +3,35 @@ import { omit } from 'lodash'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import { ErrorWithStatus } from '~/models/Errors'
 export const defaultErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
-  //omit loai bo thuoc tinh cua Object
-  console.log(err)
-  if (err instanceof ErrorWithStatus) {
-    return res.status(err.status).json(omit(err, ['status']))
+  try {
+    //omit loai bo thuoc tinh cua Object
+    console.log(err)
+    if (err instanceof ErrorWithStatus) {
+      return res.status(err.status).json(omit(err, ['status']))
+    }
+
+    const finalError: any = {}
+
+    Object.getOwnPropertyNames(err).forEach((key) => {
+      if (
+        !Object.getOwnPropertyDescriptor(err, key)?.configurable ||
+        !Object.getOwnPropertyDescriptor(err, key)?.writable
+      ) {
+        return
+      }
+      finalError[key] = err[key]
+
+      // Object.defineProperty(err, key, { enumerable: true })
+    })
+
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      message: finalError.message,
+      errorInfo: omit(finalError, ['stack'])
+    })
+  } catch (error) {
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      message: 'Internal server error',
+      errorInfo: omit(error as any, ['stack'])
+    })
   }
-
-  Object.getOwnPropertyNames(err).forEach((key) => {
-    Object.defineProperty(err, key, { enumerable: true })
-  })
-
-  res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-    message: err.message,
-    errorInfo: omit(err, ['stack'])
-  })
 }

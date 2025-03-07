@@ -8,27 +8,25 @@ export const initFolder = () => {
   ;[UPLOAD_IMAGE_TEMP_FOLDER, UPLOAD_VIDEO_TEMP_FOLDER].forEach((dir) => {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, {
-        recursive: true // mục đích tạo folder cha,
+        recursive: true, // Cho phép tạo thư mục cha nếu chưa có
+        mode: 0o777 // Cấp quyền đầy đủ: đọc, ghi, thực thi (rwx) cho tất cả user
       })
     }
   })
 }
 
-export const handleUploadImages = async (req: Request) => {
+export const handleUploadImage = async (req: Request) => {
+  const formidable = (await import('formidable')).default
   const form = formidable({
-    uploadDir: UPLOAD_IMAGE_TEMP_FOLDER, // backup image in folder uploads
+    uploadDir: UPLOAD_IMAGE_TEMP_FOLDER,
     maxFiles: 4,
-    maxFieldsSize: 300 * 1024, // 300KB ( kich thuoc cua 1 image)
-    maxTotalFileSize: 300 * 1024 * 4, // ( kich thuoc cua 4 image)
     keepExtensions: true,
+    maxFileSize: 300 * 1024, // 300KB
+    maxTotalFileSize: 300 * 1024 * 4,
     filter: function ({ name, originalFilename, mimetype }) {
-      // console.log(name) // tên key
-      // console.log(originalFilename)
-      // console.log(mimetype) // kiểu
-
-      const valid = name === 'image' && Boolean(mimetype?.includes('image'))
+      const valid = name === 'image' && Boolean(mimetype?.includes('image/'))
       if (!valid) {
-        form.emit('error' as any, new Error('File types is not allowed') as any)
+        form.emit('error' as any, new Error('File type is not valid') as any)
       }
       return valid
     }
@@ -38,7 +36,6 @@ export const handleUploadImages = async (req: Request) => {
       if (err) {
         return reject(err)
       }
-      // nếu không truyền j lên thì sẽ lỗi
       // eslint-disable-next-line no-extra-boolean-cast
       if (!Boolean(files.image)) {
         return reject(new Error('File is empty'))
